@@ -399,7 +399,11 @@ async def on_message(message):
             userID = message.author.id
             auth = "<@%s>" % (userID)
             msg = "challenges {}".format(user.mention)
+	    imgList = os.listdir("./gifs/duel/") 
+            imgString = random.choice(imgList) 
+            path = "./gifs/duel/" + imgString
             await client.send_message(message.channel, ":fencer: " + auth + " " + msg + "  "+ "to a d-d-d-d-d-duel" + ":fencer:")
+	    await client.send_file(message.channel, path)
             
     if message.content.upper().startswith(command_prefix + "ASK MIKA"):
             imgList = os.listdir("./gifs/ask/") 
