@@ -21,57 +21,6 @@ command_prefix = "-"
 TOKEN = os.environ['TOKEN']
 PRAW_SECRET = os.environ['CLIENT_SECRET']
 
-def is_image_extension(p):
-	ext = p.split(".")[-1]
-	return ext.upper() in ['JFIF', 'JPEG', 'JPG','EXIF','TIFF','GIF',
-	'BMP','PNG','PPM', 'PGM', 'PBM', 'PNM','WEBP','HDR','HEIF','BAT']
-
-def set_embed_image(embed, attachment):
-	if(is_image_extension(attachment["url"])):
-		embed.set_image(url=attachment["url"])
-		return True
-	return False
-
-
-async def merge_embeds(target_embed, message_embed_dict_list, message_attachments):
-	def get_embedded_bold_sub(s):
-		s_subbed = re.sub("""[*][*][*](.*?)[*][*][*]""", r"""\*\* *\1* \*\*""",s)
-		s_resubbed = re.sub("""[*][*](.*?)[*][*]""", r"""\*\* \1 \*\*""", s_subbed)
-		return s_resubbed
-	
-	def get_urls(m):
-		return "\n".join([i["url"] for i in m])
-	
-
-	if(len(message_embed_dict_list) > 0 or len(message_attachments) > 0):
-		embed_dict = dict()
-		if(len(message_embed_dict_list) > 0 and len(message_attachments) > 0):
-			embed_dict = message_embed_dict_list[0]
-			embed_dict["description"] = """{des}\n---\n** {em_title} **\n{em_des}\n---\n{urls}""".format(
-				des=target_embed.description,
-				urls=get_urls(message_attachments),
-				em_title=get_embedded_bold_sub(embed_dict["title"]),
-				em_des=get_embedded_bold_sub(embed_dict["description"]))
-		elif(len(message_embed_dict_list) > 0):
-			embed_dict = message_embed_dict_list[0]
-			embed_dict["description"] = """{des}\n---\n** {em_title} **\n{em_des}\n---""".format(
-				des=target_embed.description,
-				em_title=get_embedded_bold_sub(embed_dict["title"]),
-				em_des=get_embedded_bold_sub(embed_dict["description"]))
-		elif(len(message_attachments) > 0):
-			embed_dict["description"] = """{des}\n{urls}""".format(des=target_embed.description, urls=get_urls(message_attachments))
-	
-		embed_dict["title"] = target_embed.title
-		ret = discord.Embed(**embed_dict)
-		for i in message_attachments:
-			set_embed_image(ret, i)
-		if("image" in embed_dict):
-			set_embed_image(ret, embed_dict["image"])
-		return ret
-	else:
-		return target_embed
-
-   
 @client.event
 async def on_ready():
     print("MikaBot for The Lab is ready to fight!")
@@ -193,6 +142,9 @@ async def on_message(message):
          
     if message.content.upper().startswith(command_prefix + "HELLO"):
         msg = " {0.author.mention}".format(message)
+        imgList = os.listdir("./gifs/hello/") 
+        imgString = random.choice(imgList) 
+        path = "./gifs/hello/" + imgString 
         await client.send_message(message.channel, random.choice(["hi, hi, hi",
                                                                      "sup",
                                                                      "Meowello ",
@@ -208,7 +160,11 @@ async def on_message(message):
                                                                      "Did ya miss me",
                                                                      "meow!",
                                                                      "hello",])+ msg +"  "+"^-^" )
+        await client.send_file(message.channel, path)
     if message.content.upper().startswith(command_prefix + "BYE"):
+        imgList = os.listdir("./gifs/bye/") 
+        imgString = random.choice(imgList) 
+        path = "./gifs/bye/" + imgString 
         msg = " {0.author.mention}".format(message)
         await client.send_message(message.channel, random.choice(["bye",
                                                                      "goodbye",
@@ -220,21 +176,33 @@ async def on_message(message):
                                                                      "take care",
                                                                      "buh-bye friend",
                                                                      "remember to close the god damn door",])+ msg +"  "+"^-^" )
+        await client.send_file(message.channel, path)
     if message.content.upper().startswith(command_prefix + "MORNING"):
         msg = " {0.author.mention}".format(message)
+        imgList = os.listdir("./gifs/hello/") 
+        imgString = random.choice(imgList) 
+        path = "./gifs/hello/" + imgString 
         await client.send_message(message.channel, random.choice(["good morning",
                                                                      "meow",
                                                                      "too early",
                                                                      "I need another nap",])+ msg +"  "+"^-^" )
+        await client.send_file(message.channel, path)
     if message.content.upper().startswith(command_prefix + "NIGHT"):
         msg = " {0.author.mention}".format(message)
+        imgList = os.listdir("./gifs/sleep/") 
+        imgString = random.choice(imgList) 
+        path = "./gifs/sleep/" + imgString
         await client.send_message(message.channel, random.choice(["good night",
                                                                      "nighty",
                                                                      "sweet dreams",
                                                                      "nighty night",
                                                                      "don't let the shadows get you",
-                                                                     "see you in the morning",])+ msg +"  "+"^-^" )      
+                                                                     "see you in the morning",])+ msg +"  "+"^-^" )
+        await client.send_file(message.channel, path)     
     if message.content.upper().startswith(command_prefix + "FIGHT ME"):
+                imgList = os.listdir("./gifs/fight/") 
+                imgString = random.choice(imgList) 
+                path = "./gifs/fight/" + imgString
                 await client.send_message(message.channel, random.choice([":fencer:",
                                                                           "come at me bro :fencer:",
                                                                           "can you beat me in a dance competition? :man_dancing:",
@@ -249,6 +217,7 @@ async def on_message(message):
                                                                           ":fencer: :fencer: :fencer:",
                                                                           "I have seen all of naruto. you can't defeat me :fencer:",
                                                                           ":fencer: :fencer: :fencer:",]))
+                await client.send_file(message.channel, path)
     if message.content.upper().startswith(command_prefix + "PING"):
         userID = message.author.id
         await client.send_message(message.channel, "<@%s> Pong!" % (userID))
@@ -278,7 +247,11 @@ async def on_message(message):
             userID = message.author.id
             auth = "<@%s> " % (userID)
             rec = " {}".format(user.mention)
+            imgList = os.listdir("./gifs/shame/") 
+            imgString = random.choice(imgList) 
+            path = "./gifs/shame/" + imgString
             await client.send_message(message.channel, ":face_palm: " + auth + "shames" + rec + ":face_palm:")
+            await client.send_file(message.channel, path)
         
             
         
@@ -289,6 +262,9 @@ async def on_message(message):
             userID = message.author.id
             auth = "<@%s> " % (userID)
             rec = " {}".format(user.mention)
+            imgList = os.listdir("./gifs/hug/") 
+            imgString = random.choice(imgList) 
+            path = "./gifs/hug/" + imgString
             await client.send_message(message.channel, " :turtle:" + auth + random.choice(["hugs",
                                                                      "embraces",
                                                                      "super hugs",
@@ -299,9 +275,13 @@ async def on_message(message):
                                                                      "hugs and hugs and hugs and HUGS",
                                                                      "wishes to hug ",
                                                                      "fucking hugs",]) + rec + " :turtle:")
+            await client.send_file(message.channel, path)
     
     
     if message.content.upper().startswith(command_prefix + "SECRET HUG"):
+        imgList = os.listdir("./gifs/hug/") 
+        imgString = random.choice(imgList) 
+        path = "./gifs/hug/" + imgString
         try:
             await client.delete_message(message)
         except discord.Forbidden as f:
@@ -321,12 +301,15 @@ async def on_message(message):
                                                                      "   ",
                                                                      "   ",               
                                                                      "Zoinks!",]) + ":ghost:")
-
+            await client.send_file(message.channel, path)
     if message.content.upper().startswith(command_prefix + "BEDTIME"):
         for user in message.mentions:
             userID = message.author.id
             auth = "<@%s> " % (userID)
             rec = " {}".format(user.mention)
+            imgList = os.listdir("./gifs/sleep/") 
+            imgString = random.choice(imgList) 
+            path = "./gifs/sleep/" + imgString
             await client.send_message(message.channel, ":zzz: " + auth + "wants" + rec + random.choice([" to go to bed",
                                                                      " to sleep",
                                                                      " to rest",
@@ -339,12 +322,16 @@ async def on_message(message):
                                                                      " to bring mika tuna--uh-- yeah, I wrote this one. uh. please give me tuna?",
                                                                      " to sleep, but don't look under the bed",
                                                                      " to count sheep and fall asleep",]) + " :zzz:")
+            await client.send_file(message.channel, path)
             
     if message.content.upper().startswith(command_prefix + "LOVE"):
         for user in message.mentions:
             userID = message.author.id
             auth = "<@%s> " % (userID)
             rec = " {}".format(user.mention)
+            imgList = os.listdir("./gifs/love/") 
+            imgString = random.choice(imgList) 
+            path = "./gifs/love/" + imgString
             await client.send_message(message.channel, ":heart:" + auth + random.choice(["loves",
                                                                      "adores",
                                                                      "will never fight",
@@ -357,8 +344,12 @@ async def on_message(message):
                                                                      "wants to hold",
                                                                      "wants to be loved by",
                                                                      "would never anime betray",]) + rec + ":heart:")
+            await client.send_file(message.channel, path)
             
     if message.content.upper().startswith(command_prefix + "SECRET LOVE"):
+        imgList = os.listdir("./gifs/love/") 
+        imgString = random.choice(imgList) 
+        path = "./gifs/love/" + imgString
         try:
             await client.delete_message(message)
         except discord.Forbidden as f:
@@ -378,21 +369,30 @@ async def on_message(message):
                                                                      "   ",
                                                                      "   ",
                                                                      "wompety womp!",]) + ":thinking:")
+            await client.send_file(message.channel, path)
     if message.content.upper().startswith(command_prefix + "FIGHT"):
         for user in message.mentions:
             userID = message.author.id
             auth = "<@%s>" % (userID)
             msg = "wants to fight {}".format(user.mention)
+            imgList = os.listdir("./gifs/fight/") 
+            imgString = random.choice(imgList) 
+            path = "./gifs/fight/" + imgString
+                                   
             await client.send_message(message.channel, ":fencer: " + auth + " " + msg + ":fencer:")
-
+            await client.send_file(message.channel, path)
     if message.content.upper().startswith(command_prefix + "DANCE OFF"):
         for user in message.mentions:
             userID = message.author.id
             auth = "<@%s>" % (userID)
             msg = "challenges {}".format(user.mention)
+            imgList = os.listdir("./gifs/dance/") 
+            imgString = random.choice(imgList) 
+            path = "./gifs/dance/" + imgString
             await client.send_message(message.channel, ":man_dancing: " + auth + " " + msg + "  " + "to a dance battle" + "  " + random.choice([":man_dancing:",
                                                                                                                              ":dancer:",
                                                                                                                              ":dancers:",]))
+            await client.send_file(message.channel, path)
             
     if message.content.upper().startswith(command_prefix + "DUEL"):
         for user in message.mentions:
@@ -402,6 +402,9 @@ async def on_message(message):
             await client.send_message(message.channel, ":fencer: " + auth + " " + msg + "  "+ "to a d-d-d-d-d-duel" + ":fencer:")
             
     if message.content.upper().startswith(command_prefix + "ASK MIKA"):
+            imgList = os.listdir("./gifs/ask/") 
+            imgString = random.choice(imgList) 
+            path = "./gifs/ask/" + imgString
             await client.send_message(message.channel, ":8ball: " + random.choice(["Maybe? idk. Now that I think about it, this thing may be broken. NEXT!:8ball:",
                                                                      "Certainly. :8ball:",
                                                                      "Yes. I'd even bet one of my 9 lives on it. :8ball:",
@@ -417,6 +420,7 @@ async def on_message(message):
                                                                      "Yep :8ball:",
                                                                      "Do you want my honest answer, or my nice answer? :8ball:",
                                                                      "Ask yourself! :8ball:",]))
+            await client.send_file(message.channel, path)
             
     if message.content.upper().startswith(command_prefix + "COIN"):
          await client.send_message(message.channel, random.choice(("Heads "*22).split() + ("Tails "*22).split() + ["it landed on the side! :O!"]))
@@ -441,7 +445,12 @@ async def on_message(message):
                  "the mall", "the department store", "a playground"]
 
         await client.send_message(message.channel, """:paintbrush: {person} wearing {clothing} while {activity} at {place} :paintbrush:""".format(person=random.choice(person), clothing=random.choice(clothing), activity=random.choice(activity), place=random.choice(place)))
-
+    
+    if message.content.upper().startswith(command_prefix + "UPTOP"):
+        imgList = os.listdir("./gifs/uptop/") 
+        imgString = random.choice(imgList) 
+        path = "./gifs/uptop/" + imgString
+        await client.send_file(message.channel, path)
 
 
 
