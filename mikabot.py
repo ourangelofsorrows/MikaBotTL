@@ -106,8 +106,9 @@ async def on_message(message):
 
         memes_submissions = reddit.subreddit('mikabot').new()
         post_to_pick = random.randint(1, 50)
-        for i in range(0, post_to_pick):            submission = next(x for x in memes_submissions if not x.stickied)
-            
+        for i in range(0, post_to_pick):            
+            submission = next(x for x in memes_submissions if not x.stickied)
+     
         if message.author.id == "244838220259393538":
             await client.send_message(message.channel, "no you don't deserve Mika pics")
         else:
