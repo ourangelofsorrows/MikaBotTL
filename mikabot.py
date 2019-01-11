@@ -17,6 +17,10 @@ Client = discord.Client()
 client = commands.Bot(command_prefix = "-")
 command_prefix = "-"
 
+#Environment Variables
+TOKEN = os.environ['TOKEN']
+PRAW_SECRET = os.environ['CLIENT_SECRET']
+
 def is_image_extension(p):
 	ext = p.split(".")[-1]
 	return ext.upper() in ['JFIF', 'JPEG', 'JPG','EXIF','TIFF','GIF',
@@ -86,7 +90,7 @@ async def on_message(message):
 	
     if message.content.upper().startswith(command_prefix + "LAB PET"):
         reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
-                         client_secret='xcPKaFpEBuP2S5LAtJLONAy1M1A',
+                         client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
         memes_submissions = reddit.subreddit('DiscordArtPets').new()
@@ -97,13 +101,12 @@ async def on_message(message):
     
     if message.content.upper().startswith(command_prefix + "MIKA PIC"):
         reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
-                         client_secret='xcPKaFpEBuP2S5LAtJLONAy1M1A',
+                         client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
         memes_submissions = reddit.subreddit('mikabot').new()
         post_to_pick = random.randint(1, 50)
-        for i in range(0, post_to_pick):
-            submission = next(x for x in memes_submissions if not x.stickied)
+        for i in range(0, post_to_pick):            submission = next(x for x in memes_submissions if not x.stickied)
             
         if message.author.id == "244838220259393538":
             await client.send_message(message.channel, "no you don't deserve Mika pics")
@@ -112,7 +115,7 @@ async def on_message(message):
         
     if message.content.upper().startswith(command_prefix + "CAT STANDING UP"):
         reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
-                         client_secret='xcPKaFpEBuP2S5LAtJLONAy1M1A',
+                         client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
         memes_submissions = reddit.subreddit('catsstandingup').hot()
@@ -123,7 +126,7 @@ async def on_message(message):
         
     if message.content.upper().startswith(command_prefix + "CUTE"):
         reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
-                         client_secret='xcPKaFpEBuP2S5LAtJLONAy1M1A',
+                         client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
         memes_submissions = reddit.subreddit('aww').hot()
@@ -135,7 +138,7 @@ async def on_message(message):
 
     if message.content.upper().startswith(command_prefix + "WHOLESOME MEME"):
         reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
-                         client_secret='xcPKaFpEBuP2S5LAtJLONAy1M1A',
+                         client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
         memes_submissions = reddit.subreddit('wholesomememes').hot()
@@ -147,7 +150,7 @@ async def on_message(message):
         
     if message.content.upper().startswith(command_prefix + "MEME"):
         reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
-                         client_secret='xcPKaFpEBuP2S5LAtJLONAy1M1A',
+                         client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
         memes_submissions = reddit.subreddit('memes').hot()
@@ -444,5 +447,4 @@ async def on_message(message):
 
     
 
-client.run(os.environ['TOKEN'])    
-#client.run('NTMzMDE2MTA0NTQxNDg3MTE0.Dxk54w.f_NwAVCUgBafwnBxaA6HecZqatQ')
+client.run(TOKEN)    
