@@ -26,6 +26,51 @@ async def on_ready():
     print("MikaBot for The Lab is ready to fight!")
     await client.change_presence(game=Game(name="with Angel<3 | -help"))
 
+
+@client.event
+async def on_reaction_add(reaction, user):
+    if reaction.emoji == '\U0001F57A':
+        if reaction.count == 3:
+            msg = ("\U0001F57A " + reaction.message.author.display_name + " has been invited to dance in " + reaction.message.channel.name + " \U0001F57A")
+            msg2 = '*"' + reaction.message.content + '"*'
+            embed = discord.Embed(title= msg, description= msg2, color=0x7f1ae5)
+            await client.send_message(discord.Object(id='593076753157586954'), embed=embed)
+    
+@client.event
+async def on_message_delete(message):
+        fmt = '{0.author} has deleted the message:\n ***{0.content}***'
+        await client.send_message(discord.Object(id='593077154116403230'), fmt.format(message))
+    
+@client.event
+async def on_message_edit(before, after):
+        reply = ('**{0.author}** has' + ' edited their message:\n'
+                    '*{0.content}*\n'
+                    '→ ***{1.content}***')
+        await client.send_message(discord.Object(id='593077154116403230'), reply.format(after, before))
+        
+
+       
+@client.event
+async def on_member_join(member):
+    server = member.server.default_channel
+    channel = member.server.get_channel("593077154116403230")
+    fmt = "***:man_dancing: Welcome to Lola's Book of Shadows, {0.mention}!! Please read the #rules and come say hi! :man_dancing:***"
+    await client.send_message(channel, fmt.format(member, member.server))
+
+@client.event
+async def on_member_ban(member):
+    msg = "{} Has been banned. DM Angel for more info ^-^.".format(member.name)
+    print(msg)
+    await client.send_message(client.get_channel('593077154116403230'), msg)
+
+@client.event
+async def on_member_remove(member):
+    since_joined = (datetime.datetime.now() - member.joined_at).days
+    msg = "Our friend {} has left Lola's Book of Shadows :fencer:. they had only been with us {} days.".format(member.name, since_joined)
+    print(msg)
+    await client.send_message(client.get_channel('593077154116403230'), msg)
+    
+
 @client.event
 async def on_message(message):
 
