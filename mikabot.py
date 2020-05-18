@@ -18,8 +18,9 @@ client = commands.Bot(command_prefix = "-")
 command_prefix = "-"
 
 #Environment Variables
-TOKEN = os.environ['TOKEN']
-PRAW_SECRET = os.environ['CLIENT_SECRET']
+TOKEN = os.environ['MIKABOT_DISCORD_TOKEN']
+PRAW_SECRET = os.environ['MIKABOT_PRAW_CLIENT_SECRET']
+PRAW_ID = os.environ['MIKABOT_PRAW_CLIENT_ID']
 
 @client.event
 async def on_ready():
@@ -83,7 +84,7 @@ async def on_message(message):
         await client.send_message(message.channel, embed=embed)
 	
     if message.content.upper().startswith(command_prefix + "LAB PET"):
-        reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
+        reddit = praw.Reddit(client_id=PRAW_ID,
                          client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
@@ -94,7 +95,7 @@ async def on_message(message):
         await client.send_message(message.channel, submission.url)
     
     if message.content.upper().startswith(command_prefix + "MIKA PIC"):
-        reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
+        reddit = praw.Reddit(client_id=PRAW_ID,
                          client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
@@ -109,7 +110,7 @@ async def on_message(message):
                 await client.send_message(message.channel, submission.url)
         
     if message.content.upper().startswith(command_prefix + "CAT STANDING UP"):
-        reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
+        reddit = praw.Reddit(client_id=PRAW_ID,
                          client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
@@ -120,7 +121,7 @@ async def on_message(message):
         await client.send_message(message.channel, submission.url)
         
     if message.content.upper().startswith(command_prefix + "CUTE"):
-        reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
+        reddit = praw.Reddit(client_id=PRAW_ID,
                          client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
@@ -132,7 +133,7 @@ async def on_message(message):
     
 
     if message.content.upper().startswith(command_prefix + "WHOLESOME MEME"):
-        reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
+        reddit = praw.Reddit(client_id=PRAW_ID,
                          client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
@@ -144,7 +145,7 @@ async def on_message(message):
 
         
     if message.content.upper().startswith(command_prefix + "MEME"):
-        reddit = praw.Reddit(client_id='3VJY49w5aP2XpQ',
+        reddit = praw.Reddit(client_id=PRAW_ID,
                          client_secret=PRAW_SECRET,
                          user_agent='"MikaBot v1.0 (by /u/ourangelofsorrows)"')
 
